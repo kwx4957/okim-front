@@ -1,19 +1,19 @@
 <template>
-  <AppNavigation />
-  <router-view/>
-  <AppFooter />
+  <div class="flex flex-col h-screen">
+    <AppNavigation />
+    <router-view/>
+  </div>
+
 </template>
 
 <script>
-import AppFooter from './components/common/AppFooter.vue'
 import AppNavigation from './components/common/AppNavigation.vue'
 
 
 export default {
   name: 'App',
   components: {
-    AppNavigation,
-    AppFooter
+    AppNavigation
   }
 }
 </script>

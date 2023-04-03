@@ -1,9 +1,13 @@
 <template>
-  <div>
-    <div class="flex flex-row m-10 p-10" id="item-section">
+
+
+  <div class="flex-1 overflow-y-auto">
+    <div class="flex flex-col h-full">
+
+
 
       <!-- item list section-->
-      <div class="flex flex-col p-10 gap-4 w-3/5 bg-base-200 rounded-xl" id="item-list-section">
+      <div class="flex-1 flex-col bg-base-200 rounded-xl w-full mx-auto overflow-y-auto" id="item-list-section">
         <h1 class="text-2xl text-center font-bold">할 일</h1>
         <div class="flex flex-col gap-4 overflow-y-auto bg-fixed flex-grow p-3">
           <template v-for="item in this.$store.state.item.items" :key="item.itemId">
@@ -24,13 +28,57 @@
             </template>
           </template>
         </div>
+
       </div>
-      <div class="divider divider-horizontal"></div>
+      <!--      <div class="divider divider-horizontal"></div>-->
 
       <!-- item action section -->
+
       <AppAddItemForm/>
     </div>
   </div>
+
+  <!--  구성    -->
+  <div>
+
+<!--    <div class="flex flex-col justify-center mt-10" id="item-section">-->
+
+<!--      &lt;!&ndash; item list section&ndash;&gt;-->
+<!--      <div class="flex flex-col bg-base-200 rounded-xl w-full mx-auto" id="item-list-section">-->
+<!--        <h1 class="text-2xl text-center font-bold">할 일</h1>-->
+<!--        <div class="flex flex-col gap-4 overflow-y-auto bg-fixed flex-grow p-3">-->
+<!--          <template v-for="item in this.$store.state.item.items" :key="item.itemId">-->
+<!--            &lt;!&ndash;          <template v-if="item.itemStatus === 'UNDONE'">&ndash;&gt;-->
+<!--            <AppAddItemCard :item="item" />-->
+<!--            &lt;!&ndash;          </template>&ndash;&gt;-->
+<!--          </template>-->
+<!--        </div>-->
+<!--        <div class="divider"></div>-->
+
+<!--        <h1 class="text-2xl text-center font-bold">완료</h1>-->
+<!--        &lt;!&ndash; item list done section &ndash;&gt;-->
+<!--        <div class="flex flex-col gap-4 ">-->
+<!--          &lt;!&ndash; item [start]&ndash;&gt;-->
+<!--          <template v-for="item in this.$store.state.item.items" :key="item.itemId">-->
+<!--            <template v-if="item.itemStatus === 'DONE'">-->
+<!--              <AppAddItemCard :item="item" />-->
+<!--            </template>-->
+<!--          </template>-->
+<!--        </div>-->
+
+<!--      </div>-->
+<!--&lt;!&ndash;      <div class="divider divider-horizontal"></div>&ndash;&gt;-->
+
+<!--      &lt;!&ndash; item action section &ndash;&gt;>-->
+<!--    </div>-->
+
+
+  </div>
+
+
+
+
+
 
 </template>
 

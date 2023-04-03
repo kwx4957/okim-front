@@ -1,12 +1,9 @@
 <template>
+  <Popup :isLoading="isLoading" :loadingMessage="loadingMessage" />
   <div class="antialiased bg-base-200 text-gray-900 font-sans rounded-l">
     <div class="flex items-center h-screen w-full">
-      <div
-          class="w-full bg-white rounded shadow-lg p-8 m-4 md:max-w-sm md:mx-auto"
-      >
-          <span class="block w-full text-xl uppercase font-bold mb-4"
-          >회원가입</span
-          >
+      <div class="w-full bg-white rounded shadow-lg p-8 m-4 md:max-w-sm md:mx-auto">
+          <span class="block w-full text-xl uppercase font-bold mb-4">회원가입</span>
         <form class="mb-4" @submit.prevent="submitForm" action="/" method="post">
           <div class="mb-4 md:w-full">
             <label for="email" class="block text-xs mb-1">
@@ -37,7 +34,11 @@
           </div>
           <div class="mb-4 md:w-full">
             <label for="password" class="block text-xs mb-1">비밀번호
-              <span class="ml-1 text-red-400">*</span></label>
+              <span class="ml-1 text-red-400">*</span>
+              <span :class="isPassPasswordSize ? 'text-blue-400 ml-2' : 'text-red-400 ml-2'">
+                {{ requirePasswordSizeMessage }}
+          </span>
+            </label>
             <div class="relative">
               <input
                   class="w-full border rounded p-2 outline-none focus:shadow-outline pr-12"
@@ -153,10 +154,16 @@ import {defineComponent} from "vue";
 import {userService} from "@/services/user/UserService";
 import {validateEmail} from "@/utils/validation";
 import {getGroupName} from "@/services/group/getGroupName";
+import Popup from "@/components/Popup";
 
 export default defineComponent({
+  components:{
+    Popup
+  },
   data() {
     return {
+      isLoading: false,
+      loadingMessage: '',
       email: '',
       verifiedEmail: '',
       password: '',
@@ -178,12 +185,17 @@ export default defineComponent({
       isSendingVerificationCode: false,
       verificationCodeSent: false,
       groupId: 0,
-      groups: []
+      groups: [],
+      requirePasswordSizeMessage: '',
+      isPassPasswordSize: false
     }
   },
   watch: {
     passwordConfirm: function () {
       this.validatePasswordConfirm();
+    },
+    password: function (){
+      this.validatePasswordSize();
     }
   },
   computed: {
@@ -207,6 +219,12 @@ export default defineComponent({
     // 회원가입
     async submitForm() {
 
+      // 회원 가입 데이터 유효성 체크
+      if(this.validationCheckFail()){
+        return
+      }
+
+      // 회원가입 데이터
       const signUpRequest = {
         email: this.verifiedEmail,
         password: this.password,
@@ -215,12 +233,15 @@ export default defineComponent({
         groupId: this.groupId
       }
 
-      const response = await userService.singup(signUpRequest)
-
-      if (response.status === 201) {
-        alert("성공적으로 가입을 완료하였습니다.")
-        this.$router.push({name: 'login'})
-      }
+      // 회원가입 요청
+      await userService.singup(signUpRequest)
+          .then(() => {
+                alert("성공적으로 가입을 완료하였습니다.")
+                this.$router.push({name: 'login'});
+              }
+          ).catch((error) =>{
+            alert(error.response.data.message);
+          })
     },
 
     // 닉네임 중복체크
@@ -256,7 +277,6 @@ export default defineComponent({
 
     // 인증코드 메일로 보내기
     async sendVerificationCodeToEmail() {
-      this.isSendingVerificationCode = true;
 
       // 1. 메일 중복 체크
       if (!this.isPassEmailDuplicate) {
@@ -264,6 +284,7 @@ export default defineComponent({
         return
       }
 
+      this.isSendingVerificationCode = true;
 
       // 2. 인증코드 메일로 전송
       await userService.sendVerificationCode(this.email)
@@ -280,7 +301,20 @@ export default defineComponent({
       this.verificationCodeSent = true;
 
     },
+    // 8자 이상 20자미만
+    validatePasswordSize() {
+      if (this.password.length >= 8 && this.password.length <= 20) {
+        this.isPassPasswordSize = true
+        this.requirePasswordSizeMessage = ''
+      }else{
+        this.isPassPasswordSize = false
+        this.requirePasswordSizeMessage = "비밀번호는 8자 이상 20자 미만 이어야합니다."
+      }
+    },
+
+    // 비밀번호 확인 체크
     validatePasswordConfirm() {
+
       if (this.passwordConfirm !== '') {
         if (this.password === this.passwordConfirm) {
           this.isPassPasswordConfirm = true;
@@ -294,6 +328,20 @@ export default defineComponent({
         this.passwordConfirmMessage = "비밀번호를 한번 더 입력하세요";
       }
     },
+
+    // 회원 가입 전 최종 유효성 체크
+    validationCheckFail() {
+      return !this.isPassPasswordSize || !this.isPassPasswordConfirm || !this.isPassEmailDuplicate || !this.isPassNicknameDuplicate;
+    },
+
+    showLoading(message) {
+      this.isLoading = true;
+      this.loadingMessage = message;
+    },
+    hideLoading() {
+      this.isLoading = false;
+      this.loadingMessage = "";
+    }
   }
 })
 </script>
