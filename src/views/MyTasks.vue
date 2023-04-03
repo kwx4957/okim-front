@@ -16,7 +16,7 @@
 
     <div class="main">
       <main>
-        <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-10">
+        <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 p-10">
           <!-- main red card(case1. 하나의 테스크 가운데 할일을 절반도 못한 경우) -->
 
           <router-link v-for="item in tasks" :key="item.id" :to="{ name: 'editTask', params: { taskId: item.taskId }}" :id="`card-${item.id}`">

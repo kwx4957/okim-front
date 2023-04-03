@@ -9,7 +9,7 @@
 
 
         <!-- navigation.menu [start] -->
-        <ul class="menu menu-horizontal menu-compact bg-base-100 p-2">
+        <ul class="menu menu-horizontal menu-compact bg-base-100 p-2 hidden">
           <!-- tabindex will make the parent menu focusable to keep the submenu open if it's focused -->
           <li tabindex="0">
             <span>그룹</span>

@@ -39,7 +39,7 @@ export default new Vuex.Store({
             state.user = null;
             state.refreshToken = null;
             state.accessToken = null;
-        },
+        }
     }, actions: {
         // [LoginForm]
         async LOGIN({commit}, data) {

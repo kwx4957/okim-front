@@ -8,7 +8,7 @@ const itemService = {
 
     // 아이템 삭제
     async deleteItem(itemId){
-        return apiWithAuth.delete(`/api/v1/item/${itemId}`);
+        return apiWithAuth.delete(`/api/v1/items/${itemId}`);
     }
 }
 

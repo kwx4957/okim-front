@@ -16,8 +16,10 @@ const item = {
 
         SET_CURRENT_ITEM: (state, item) => {
             state.currentItem = item
+        },
+        DELETE_ITEM(state, itemId) {
+            state.items = state.items.filter(item => item.itemId !== itemId);
         }
-
     },
     actions: {
         // 생성된 아이템 저장
@@ -34,7 +36,10 @@ const item = {
         },
         setCurrentTime({commit}, item){
             commit('SET_CURRENT_ITEM', item)
-        }
+        },
+        deleteItem({commit}, itemId) {
+            commit('DELETE_ITEM', itemId)
+        },
     },
     getters: {
         doneItems: state => {
