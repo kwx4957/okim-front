@@ -8,7 +8,7 @@
       <div class="flex-1 flex-col bg-base-200 rounded-xl w-full mx-auto overflow-y-auto" id="item-list-section">
         <div class="flex flex-col gap-4 overflow-y-auto bg-fixed flex-grow p-3">
           <template v-for="item in this.$store.state.item.items" :key="item.itemId">
-            <AppAddItemCard :item="item" @deleteItem="deleteItem"/>
+            <AppAddItemCard :item="item" @deleteItem="deleteItem" @refreshItems="fetchItems"/>
           </template>
         </div>
       </div>
@@ -80,7 +80,19 @@ export default defineComponent({
     deleteItem(itemId) {
       console.log(`아이템 아이디 받았음 : ${itemId}`)
       this.$store.dispatch('deleteItem', itemId);
-    }
+    },
+    async fetchItems() {
+      console.log("호출")
+      const response = await taskService.getAllItemsByTaskId(this.taskId);
+      const itemTotalCount = response.data.data.itemTotalCount;
+      const items = response.data.data.items;
+      this.items = response.data.data.items;
+      if (itemTotalCount !== 0) {
+        this.setItems(items);
+      } else {
+        this.initItems();
+      }
+    },
   }
 })
 </script>

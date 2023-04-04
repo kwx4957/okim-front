@@ -33,7 +33,7 @@
                   <span class="mr-2">{{ item.itemCompletedCount }}</span>/<span class="ml-2">{{ item.itemTotalCount }}</span>
                 </div>
                 <p class="italic my-5">{{ item.mainItem.itemTitle }}</p>
-                <h4 class="text-xs text-gray-500 text-right">{{ item.taskCreatedDt }}</h4>
+                <h4 class="text-xs text-gray-500 text-right">{{ getRelativeTime(item.taskCreatedDt) }}</h4>
               </div>
             </div>
           </router-link>
@@ -52,6 +52,10 @@ import { defineComponent } from 'vue'
 import ButtonCreateTask from "@/components/ButtonCreateTask";
 import {userService} from "@/services/user/UserService";
 import taskService from "@/services/task/TaskService";
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
+
 
 export default defineComponent({
   name: `MyTasks`,
@@ -96,6 +100,11 @@ export default defineComponent({
       const response = await taskService.getAllUserTasks(localStorage.getItem('userId'));
       console.log(`${JSON.stringify(response.data.data.tasks)}`)
       this.tasks = response.data.data.tasks;
+    },
+
+    // 날짜계산
+    getRelativeTime(date) {
+      return dayjs(date).fromNow()
     }
   }
 })

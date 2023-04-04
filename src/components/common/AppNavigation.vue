@@ -1,22 +1,27 @@
 <template>
-  <header >
+  <header>
     <div class="navbar bg-base-100">
       <div class="flex-1">
         <!-- nav.logo -->
         <router-link to="/">
-            <div class="btn btn-ghost normal-case text-xl">할일 공유</div>
+          <div class="btn btn-ghost normal-case text-xl rounded rounded-xs">할일 공유</div>
         </router-link>
 
 
         <!-- navigation.menu [start] -->
-        <ul class="menu menu-horizontal menu-compact bg-base-100 p-2 hidden">
+        <ul class="menu menu-horizontal menu-compact">
           <!-- tabindex will make the parent menu focusable to keep the submenu open if it's focused -->
           <li tabindex="0">
             <span>그룹</span>
             <ul class="bg-base-100">
               <!-- TODO group 클릭 시 어떻게 로직 짤지?-->
-              <li v-for="group in groups" :key="group.id">
-                <h1 @click="setCurrentGroup(group)">{{ group.organizationName }}</h1>
+              <li v-for="group in groups" :key="group.organizationId" :id="'group-menu-' + group.organizationId">
+                <h1 @click="handleClickGroupMenu(group.organizationId)">{{ group.organizationName }}</h1>
+              </li>
+              <li>
+                <h1 class="font-bold text-base-500">
+                  <router-link :to="{ name: 'groupList'}">그룹 현황 보기</router-link>
+                </h1>
               </li>
             </ul>
           </li>
@@ -59,9 +64,8 @@
 
 <script>
 import {defineComponent} from 'vue';
-import {getGroupName} from "@/services/group/getGroupName";
 import {mapGetters} from "vuex";
-
+import {getGroups} from "@/api/group";
 
 export default defineComponent({
   name: 'AppNavigation',
@@ -73,18 +77,24 @@ export default defineComponent({
       groups: [],
     }
   },
-  created() {
-    const groupName = getGroupName();
-    groupName.then((groups) => {
-      this.groups = groups
-    })
+  mounted() {
+    this.getAllGroupName();
   },
   methods: {
+    async handleClickGroupMenu(organizationId) {
+      this.$router.push({name: 'groupsTask', params: { groupId: organizationId }});
+    },
 
-    // 현재 그룹 설정
-    setCurrentGroup(group) {
-      this.setGroup(group)
-      this.$router.push({name : 'home'});
+    // 모든 그룹 이름 가져오기
+    async getAllGroupName() {
+      // 1. 그룹 리스트 API 요청
+      await getGroups()
+          .then((response) => {
+            // 2. 그룹 데이터 저장
+            this.groups = response.data.data
+          }).catch(error => {
+            console.log(error.data)
+          })
     },
 
     logout() {

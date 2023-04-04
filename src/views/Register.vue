@@ -1,5 +1,5 @@
 <template>
-  <Popup :isLoading="isLoading" :loadingMessage="loadingMessage" />
+<!--  <Popup :isLoading="isLoading" :loadingMessage="loadingMessage" />-->
   <div class="antialiased bg-base-200 text-gray-900 font-sans rounded-l">
     <div class="flex items-center h-screen w-full">
       <div class="w-full bg-white rounded shadow-lg p-8 m-4 md:max-w-sm md:mx-auto">

@@ -1,7 +1,10 @@
 <template>
     <div v-if="isLoading" class="loading-overlay">
-      <div class="loading-message">{{ loadingMessage }}</div>
+      <div class="flex flex-col">
+        <div class="loading-message">{{ loadingMessage }}</div>
+      </div>
     </div>
+    <button class="fixed right-0 m-5 close-button font-bold text-4xl" @click="hideLoading">X</button>
 </template>
 
 <script>
@@ -43,5 +46,18 @@ export default {
   color: #fff;
   font-size: 1.2rem;
   font-weight: bold;
+  position: relative;
+}
+
+.loading-overlay .loading-message .close-button {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 20px;
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
 }
 </style>
