@@ -4,7 +4,7 @@
       <div class="flex-1">
         <!-- nav.logo -->
         <router-link to="/">
-          <div class="btn btn-ghost normal-case text-xl rounded rounded-xs">할일 공유</div>
+          <div class="btn btn-ghost normal-case text-xl rounded rounded-xs">할일 공유 v 1.0</div>
         </router-link>
 
 
