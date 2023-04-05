@@ -28,7 +28,7 @@ const routes = [
         name: 'editTask',
         path: '/tasks/:taskId/edit',
         meta: { auth: true },
-        component: () => import(/* webpackChunkName: "profile" */ '../views/EditTaskItem.vue')
+        component: () => import(/* webpackChunkName: "profile" */ '../views/UserTaskItems.vue')
     },
     {
         name: 'register',

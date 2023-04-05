@@ -7,7 +7,11 @@
       <!-- 아이템 리스트 -->
       <div class="flex-1 flex-col bg-base-200 rounded-xl w-full mx-auto overflow-y-auto" id="item-list-section">
         <div class="flex flex-col gap-4 overflow-y-auto bg-fixed flex-grow p-3">
-          <template v-for="item in this.$store.state.item.items" :key="item.itemId">
+<!--          <template v-for="item in this.$store.state.item.items" :key="item.itemId">-->
+<!--            <AppAddItemCard :item="item" @deleteItem="deleteItem" @refreshItems="fetchItems"/>-->
+<!--          </template>-->
+          <template v-for="item in items" :key="item.itemId">
+            {{ item }}
             <AppAddItemCard :item="item" @deleteItem="deleteItem" @refreshItems="fetchItems"/>
           </template>
         </div>
@@ -79,7 +83,14 @@ export default defineComponent({
     // 아이템 삭제
     deleteItem(itemId) {
       console.log(`아이템 아이디 받았음 : ${itemId}`)
-      this.$store.dispatch('deleteItem', itemId);
+      // this.$store.dispatch('deleteItem', itemId);
+
+      // this.items = this.items.filter(item => item.itemId !== itemId);
+
+      const indexToRemove = this.items.findIndex(item => item.itemId === itemId);
+      if (indexToRemove !== -1) {
+        this.items.splice(indexToRemove, 1);
+      }
     },
     async fetchItems() {
       console.log("호출")

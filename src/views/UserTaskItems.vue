@@ -45,6 +45,8 @@ export default {
         }).catch(error => {
       console.log(JSON.stringify(error.data))
     });
+
+
   }
 }
 </script>
