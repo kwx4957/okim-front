@@ -48,7 +48,7 @@ export default {
       // 1. 삭제요청
       await itemService.deleteItem(this.item.itemId)
           .then(response => {
-            console.log(JSON.stringify(response.data))
+            (JSON.stringify(response.data))
 
             // 2. props tasks 에서 해당 item 만 삭제
             this.$emit('deleteItem', this.item.itemId)
@@ -62,7 +62,7 @@ export default {
           .then(response => {
 
             // 2. 상태 갱신
-            console.log(JSON.stringify(response.data))
+            (JSON.stringify(response.data))
             this.$emit('refreshItems')
           });
     },

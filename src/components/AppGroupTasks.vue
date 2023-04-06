@@ -1,70 +1,45 @@
 <template>
 
     <!-- 간단 설명 -->
-    <div class="description text-center text-3xl font-bold mb-10">사용자들이 등록한 할일 목표 현황입니다.</div>
+    <div class="description text-center text-3xl font-bold mb-10">최근 등록된 할일들 입니다.</div>
 
     <main>
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-10">
+      <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 p-10">
 
-        <template v-for="(task, index) in tasks" :key="index">
-          <GroupTaskItem :task="task"></GroupTaskItem>
+        <template v-for="task in tasks" :key="task.taskId">
+          <GroupTaskItem :groupTask="task"></GroupTaskItem>
         </template>
-        <div ref="scroll" class="scroll-indicator"></div>
-
-
       </div>
     </main>     
 </template>
 
 <script>
-import GroupTaskItem from './GroupTaskItem.vue'
+import taskService from "@/services/task/TaskService";
+import GroupTaskItem from "@/components/GroupTaskItem";
 
 export default {
     name: 'AppGroupTasks',
     components: {
-        GroupTaskItem
+      GroupTaskItem
     },
   data() {
     return {
-      tasks: [],
-      isEnd: false,
-      page: 0,
-      size: 10,
+      tasks: []
     };
   },
   async mounted() {
-    // await this.$nextTick(); // 스크롤 요소가 렌더링될 때까지 기다립니다.
-    // await this.loadMore();
-    // window.addEventListener('scroll', this.onScroll);
+    await this.fetchRecentTasks();
   },
   methods: {
-    // async loadMore() {
-    //   if (this.isEnd) return;
-    //   try {
-    //     const response = await api.get(`/api/v1/group/1/tasks?page=${this.page}&size=${this.size}`);
-    //     this.tasks = this.tasks.concat(response.data.data.tasks);
-    //     this.isEnd = response.data.isEnd;
-    //     this.page += 1;
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // },
-    // onScroll() {
-    //   const scrollElement = this.$refs.scroll;
-    //   const scrollPosition = scrollElement.getBoundingClientRect().top + scrollElement.offsetHeight;
-    //   const windowHeight = window.innerHeight;
-    //   if (scrollPosition < windowHeight) {
-    //     this.loadMore();
-    //   }
-    // },
+    async fetchRecentTasks() {
+      await taskService.getRecentTasks()
+          .then(response => {
+            (JSON.stringify(response.data))
+            this.tasks = response.data.data.tasks;
+          }).catch(error => {
+            console.log(JSON.stringify(error.data))
+          });
+    },
   }
 }
 </script>
-
-
-<style>
-.scroll-indicator {
-  height: 100px;
-  width: 100%;
-}
-</style>

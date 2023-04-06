@@ -70,11 +70,9 @@ export default defineComponent({
     async submitForm() {
       try{
         const loginRequest = RequestLogin.create(this.email, this.password);
-        const response = await this.$store.dispatch('LOGIN', loginRequest);
-        console.log(response)
+        await this.$store.dispatch('LOGIN', loginRequest);
         this.$router.push({name: 'home'});
       } catch (e) {
-        console.log(e.response.data)
         this.logMessage = e.response.data.message
       }finally {
         this.initForm();

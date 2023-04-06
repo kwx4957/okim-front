@@ -61,7 +61,7 @@ export default {
           .then(response => {
 
             //  2. 데이터 저장
-            console.log(JSON.stringify(response.data))
+            (JSON.stringify(response.data))
             this.task = response.data.data;
           }).catch(error => {
         console.log(JSON.stringify(error.data))
@@ -72,7 +72,7 @@ export default {
     },
 
     deleteItem(itemId) {
-      console.log(`받음 : ${itemId}`)
+      (`받음 : ${itemId}`)
       this.task.items = this.task.items.filter(item => item.itemId !== itemId)
     }
   }

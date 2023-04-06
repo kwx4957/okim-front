@@ -9,6 +9,10 @@
       <h1 class="text-3xl italic">
         {{ user.nickname }}
       </h1>
+
+      <h1 class="text-xs">
+        {{ user.selfDesc || "이곳에는 자기소개가 들어갑니다." }}
+      </h1>
     </div>
     <!-- description [end]-->
 
@@ -20,10 +24,16 @@
 
           <router-link v-for="item in tasks" :key="item.taskId" :to="{ name: 'userTaskItems', params: { taskId: item.taskId, userId: this.$route.params.userId }}" :id="`card-${item.id}`">
             <div class="card bg-base-200 shadow-lg hover:shadow-2xl hover:cursor-pointer hover:bg-neutral-200 border rounded-lg">
-              <div class="card-body">
-                <div class="badge badge-lg my-2 badge-error text-sm">
-                  <span class="mr-2">{{ item.itemCompletedCount }}</span>/<span class="ml-2">{{ item.itemTotalCount }}</span>
-                </div>
+              <div class="card-body items-center">
+                <template v-if="item.itemCompletedCount / item.itemTotalCount === 1">
+                  <div class="radial-progress text-green-600" :style="{ '--value': (item.itemCompletedCount/item.itemTotalCount)*100 }">{{ item.itemCompletedCount }} / {{ item.itemTotalCount }}</div>
+                </template>
+                <template v-if="item.itemCompletedCount / item.itemTotalCount >= 0.5 && item.itemCompletedCount / item.itemTotalCount < 1">
+                  <div class="radial-progress text-yellow-600" :style="{ '--value': (item.itemCompletedCount/item.itemTotalCount)*100 }">{{ item.itemCompletedCount }} / {{ item.itemTotalCount }}</div>
+                </template>
+                <template v-if="item.itemCompletedCount / item.itemTotalCount < 0.5">
+                  <div class="radial-progress text-red-600" :style="{ '--value': (item.itemCompletedCount/item.itemTotalCount)*100 }">{{ item.itemCompletedCount }} / {{ item.itemTotalCount }}</div>
+                </template>
                 <p class="italic my-5">{{ item.mainItem.itemTitle }}</p>
                 <h4 class="text-xs text-gray-500 text-right">{{ getRelativeTime(item.taskCreatedDt) }}</h4>
               </div>
@@ -60,7 +70,6 @@ export default defineComponent({
       tasks: []
     }
   },
-  computed: {},
   mounted() {
     this.getUserProfile();
     this.fetchUserTasks();
@@ -70,7 +79,6 @@ export default defineComponent({
     fetchUserTasks() {
       taskService.getAllUserTasks(this.$route.params.userId)
           .then(response => {
-            console.log(`${JSON.stringify(response.data)}`)
             this.tasks = response.data.data.tasks;
           }).catch(error => {
             console.log(JSON.stringify(error.data))
@@ -82,7 +90,6 @@ export default defineComponent({
 
       userService.getProfileInfo(this.$route.params.userId)
       .then(response => {
-          console.log(`${JSON.stringify(response.data)}`)
           this.user = response.data;
       }).catch(error => {
         console.log(`${JSON.stringify(error.data)}`)

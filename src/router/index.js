@@ -43,8 +43,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "profile" */ '../views/UserTasks.vue')
     },
 
-
-
     {
         name: 'taskCreate',
         path: '/tasks/:taskId/create',
@@ -73,8 +71,8 @@ const router = createRouter({
     routes: routes
   })
 router.beforeEach((to, from, next) => {
+    // authentication filter
     if (to.meta.auth && localStorage.getItem('currentUser') === null) {
-        console.log("인증이 필요합니다.");
         next('/login');
         return;
     }

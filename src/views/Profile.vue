@@ -55,18 +55,19 @@
             />
           </div>
           <div class="mb-4 md:w-full">
-            <label for="group" class="block text-xs mb-1">소속 그룹</label>
-            <div class="relative">
+            <label for="group" class="block text-xs mb-1">소속 그룹
+              <span class="ml-1 text-red-400">*</span>
+            </label>
               <select
                   id="group"
                   name="group"
-                  class="w-full border rounded p-2 outline-none focus:shadow-outline"
+                  class="select w-full border rounded p-2 outline-none focus:shadow-outline"
+                  v-model="groupId"
               >
-                <option value="1">쿠버네티스 10회차</option>
-                <option value="2">쿠버네티스 11회차</option>
-                <option value="3">쿠버네티스 12회차</option>
+                <template v-for="group in groups" :key="group.organizationId">
+                  <option :value="group.organizationId" :selected="groupId === group.organizationId">{{ group.organizationName }}</option>
+                </template>
               </select>
-            </div>
           </div>
           <div class="mb-4 md:w-full">
             <label for="intro" class="block text-xs mb-1"
@@ -97,6 +98,7 @@
 import {defineComponent} from 'vue';
 import ButtonCreateTask from "@/components/ButtonCreateTask";
 import {userService} from "@/services/user/UserService";
+import {getGroups} from "@/api/group";
 
 export default defineComponent({
   name: `Profile`,
@@ -106,27 +108,27 @@ export default defineComponent({
       githubId: '',
       groupId: '',
       selfDesc: '',
+      userGroup: {},
       profileImageUrl: '',
       isPassNicknameDuplicate: '',
       isPassNicknameDuplicateMessage: '',
       verifiedNickname: '',
+      groups: []
     }
   },
   components: {
     ButtonCreateTask
   },
+  computed: {
+    isNowGroup(menuOrganizationId) {
+      return this.userGroup.organizationId === menuOrganizationId
+    },
+  },
   async mounted() {
+    await this.fetchUserProfile();
+    await this.fetchGroupInfo();
 
-    // 1. 유저 프로필 조회
-    const response = await userService.getProfileInfo(localStorage.getItem('userId'))
-    console.log(JSON.stringify(response))
-
-    // 2. 데이터 저장
-    this.nickname = response.data.nickname;
-    this.verifiedNickname = response.data.nickname;
-    this.githubId = response.data.githubId;
-    this.selfDesc = response.data.selfDesc;
-    this.profileImageUrl = response.data.profileImage;
+    this.groupId = this.userGroup.organizationId;
   },
   methods: {
     async checkDuplicateNickname() {
@@ -140,7 +142,19 @@ export default defineComponent({
         this.isPassNicknameDuplicateMessage = "사용 중인 닉네임입니다.";
       }
     },
+    async fetchUserProfile() {
+      const response = await userService.getProfileInfo(localStorage.getItem('userId'))
 
+      // 2. 데이터 저장
+      this.nickname = response.data.nickname;
+      this.verifiedNickname = response.data.nickname;
+      this.githubId = response.data.githubId;
+      this.selfDesc = response.data.selfDesc;
+      this.profileImageUrl = response.data.profileImage;
+      this.userGroup = response.data.organization;
+    },
+
+    // 프로필 이미지 미리보기
     previewProfileImage(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
@@ -149,12 +163,14 @@ export default defineComponent({
         this.profileImageUrl = event.target.result;
       };
     },
+    // 프로필 수정 데이터 전송
     submitEditData() {
       const formData = new FormData();
       // 폼 데이터 생성
       formData.append('nickname', this.nickname);
       formData.append('githubId', this.githubId);
       formData.append('selfDesc', this.selfDesc);
+      formData.append('groupId', this.groupId);
       if (this.$refs.fileInput.files[0] !== undefined) {
         formData.append('file', this.$refs.fileInput.files[0]);
       }
@@ -163,24 +179,20 @@ export default defineComponent({
       // 업데이트 프로필
       userService.updateProfile(localStorage.getItem('userId'), formData)
           .then(response => {
-            console.log(JSON.stringify(response))
+            (JSON.stringify(response))
             alert("프로필이 수정되었습니다.")
           }).catch(() => {
-        alert("문제가 발생하였습니다. 다시 시도 바랍니다.")
+        alert("프로필 수정 도중 문제가 발생하였습니다. 다시 시도 바랍니다.")
       })
-
-
-      // axios.post('/api/profile', formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },'
-      // })
-      //     .then(response => {
-      //       // handle successful response
-      //     })
-      //     .catch(error => {
-      //       // handle error response
-      //     });
+    },
+    async fetchGroupInfo() {
+      await getGroups()
+          .then(response => {
+            (JSON.stringify(response.data))
+            this.groups = response.data.data;
+          }).catch(error => {
+            console.log(JSON.stringify(error.response))
+          });
     },
   }
 })

@@ -1,7 +1,7 @@
 <template>
 <!--  <Popup :isLoading="isLoading" :loadingMessage="loadingMessage" />-->
   <div class="antialiased bg-base-200 text-gray-900 font-sans rounded-l">
-    <div class="flex items-center h-screen w-full">
+    <div class="flex items-center w-full">
       <div class="w-full bg-white rounded shadow-lg p-8 m-4 md:max-w-sm md:mx-auto">
           <span class="block w-full text-xl uppercase font-bold mb-4">회원가입</span>
         <form class="mb-4" @submit.prevent="submitForm" action="/" method="post">
@@ -124,12 +124,11 @@
             <div class="relative">
               <select id="dropdown"
                       name="dropdown"
-                      class="w-full border rounded p-2 outline-none focus:shadow-outline"
-                      v-model="groupId"
-              >
-                <option v-for="group in groups" :key="group.id" :value="group.id">
-                  {{ group.organizationName }}
-                </option>
+                      class="select w-full border rounded p-2 outline-none focus:shadow-outline"
+                      v-model="groupId">
+                <template v-for="group in groups" :key="group.organizationId">
+                  <option :value="group.organizationId" :selected="group.organizationId === 1">{{ group.organizationName }}</option>
+                </template>
               </select>
             </div>
 
@@ -153,12 +152,10 @@
 import {defineComponent} from "vue";
 import {userService} from "@/services/user/UserService";
 import {validateEmail} from "@/utils/validation";
-import {getGroupName} from "@/services/group/getGroupName";
-import Popup from "@/components/Popup";
+import {getGroups} from "@/api/group";
 
 export default defineComponent({
   components:{
-    Popup
   },
   data() {
     return {
@@ -184,7 +181,7 @@ export default defineComponent({
       verificationCode: '',
       isSendingVerificationCode: false,
       verificationCodeSent: false,
-      groupId: 0,
+      groupId: 1,
       groups: [],
       requirePasswordSizeMessage: '',
       isPassPasswordSize: false
@@ -209,10 +206,10 @@ export default defineComponent({
       }
     }
   },
-  created() {
-    const groupName = getGroupName();
-    groupName.then((groups) => {
-      this.groups = groups
+  async mounted() {
+    await getGroups().then((response) => {
+      (JSON.stringify(response.data.data))
+      this.groups = response.data.data
     })
   },
   methods: {

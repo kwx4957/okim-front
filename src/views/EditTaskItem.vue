@@ -82,7 +82,7 @@ export default defineComponent({
 
     // 아이템 삭제
     deleteItem(itemId) {
-      console.log(`아이템 아이디 받았음 : ${itemId}`)
+      (`아이템 아이디 받았음 : ${itemId}`)
       // this.$store.dispatch('deleteItem', itemId);
 
       // this.items = this.items.filter(item => item.itemId !== itemId);
@@ -93,7 +93,7 @@ export default defineComponent({
       }
     },
     async fetchItems() {
-      console.log("호출")
+      ("호출")
       const response = await taskService.getAllItemsByTaskId(this.taskId);
       const itemTotalCount = response.data.data.itemTotalCount;
       const items = response.data.data.items;

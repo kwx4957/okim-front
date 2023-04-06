@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-center text-4xl font-bold py-10 bg-yellow-100"> {{ this.group.groupName }}</h1>
+  <h1 class="text-center text-4xl font-bold py-10 bg-base-200"> {{ this.group.groupName }}</h1>
 
   <div class="flex-1 overflow-y-auto">
 
@@ -60,8 +60,8 @@ export default {
   methods: {
     async fetchGroupTasks() {
       // 1. 모든 그룹의 tasks 요청
-      console.log(`fetchGroupTasks : ${this.$route.params['groupId']}`)
-      await getGroupTasks(this.$route.params['groupId'], 0, 1000)
+      (`fetchGroupTasks : ${this.$route.params['groupId']}`)
+      await getGroupTasks(this.$route.params['groupId'], 0, 100000)
           .then(response => {
             // 2. 데이터 저장
             this.groupTasks = response.data.data.tasks;

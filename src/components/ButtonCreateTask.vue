@@ -1,8 +1,8 @@
 <template>
   <!-- stick button with create TODO  -->
-  <div class="fixed bottom-6 right-6 p-4">
+  <div class="fixed bottom-6 right-6 p-2">
     <div class="tooltip" data-tip="할일을 등록하세요!">
-      <button class="btn btn-circle btn-outline w-24 h-24 bg-neutral-300 border-0" @click="createTemporaryTask">
+      <button class="btn btn-circle btn-outline w-20 h-20 bg-neutral-300 border-0" @click="createTemporaryTask">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 64 64" stroke-width="4"
              stroke="currentColor" fill="none">
           <path d="M55.5,23.9V53.5a2,2,0,0,1-2,2h-43a2,2,0,0,1-2-2v-43a2,2,0,0,1,2-2H41.64"/>
@@ -18,7 +18,6 @@
 <script>
 import {defineComponent} from 'vue'
 import taskService from "@/services/task/TaskService";
-import {mapActions} from 'vuex'
 
 export default defineComponent({
   name: 'ButtonCreateTask',

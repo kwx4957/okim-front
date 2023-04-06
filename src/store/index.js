@@ -74,9 +74,6 @@ export default new Vuex.Store({
             return state.user.nickname || JSON.parse(getUserFromLocalStorage()).nickname;
         },
         userProfileLink(state){
-            if (!state.user || Object.keys(state.user).length === 0) {
-                return "@/assets/curry.jpg"
-            }
             return state.user.profileImage || JSON.parse(getUserFromLocalStorage() || "{}").profileImage;
         },
         isLoggedIn(state) {

@@ -34,8 +34,8 @@ export default {
     // 그룹 현황 API 조회
     getGroups()
         .then(response => {
-          console.log(JSON.stringify(response.data));
-          console.log(JSON.stringify(response.data.data));
+          (JSON.stringify(response.data));
+          (JSON.stringify(response.data.data));
           this.groups = [];
           this.groups = response.data.data;
 
@@ -49,7 +49,7 @@ export default {
       // 1. 그룹 api 조회
       getGroups()
           .then(response => {
-            console.log(JSON.stringify(response.data))
+            (JSON.stringify(response.data))
 
             // 2. 데이터 저장
           }).catch(error => {

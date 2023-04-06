@@ -1,4 +1,4 @@
-import {apiWithAuth} from "@/api";
+import {api, apiWithAuth} from "@/api";
 
 const taskService = {
 
@@ -16,6 +16,10 @@ const taskService = {
     // 유저의 모든 테스크 조회
     async getAllUserTasks(userId) {
         return apiWithAuth.get(`/api/v1/user/${userId}/tasks`);
+    },
+
+    async getRecentTasks() {
+        return api.get(`/api/v1/tasks`);
     },
 }
 

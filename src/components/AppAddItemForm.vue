@@ -3,9 +3,6 @@
     <!-- input form contents -->
     <form v-on:submit.prevent="addItem">
       <div class="form-control w-full max-w-xs mx-auto ">
-<!--        <label class="label">-->
-<!--          <span class="label-text text-md">할일을 작성하세요</span>-->
-<!--        </label>-->
         <input
             type="text" placeholder="할일을 작성하세요" class="input w-full max-w-xs mb-12 mt-5 rounded-lg"
             v-model="formItemTitle"
@@ -49,7 +46,7 @@ export default {
         title: this.formItemTitle
       }
 
-      console.log(JSON.stringify(item))
+      (JSON.stringify(item))
 
       // 2. 테스크에 아이템 추가 요청 보내기
       const response = await itemService.addItem(item)
@@ -68,7 +65,7 @@ export default {
       }
 
       itemService.addItem(item).then(response => {
-        console.log(JSON.stringify(response.data.data))
+        (JSON.stringify(response.data.data))
         this.$emit("refreshItem")
         this.formItemTitle = ''
       }).catch(error => {

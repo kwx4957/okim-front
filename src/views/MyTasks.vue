@@ -74,7 +74,7 @@ export default defineComponent({
   methods: {
     async getUserTasks() {
       const response = await taskService.getAllUserTasks(localStorage.getItem('userId'));
-      console.log(`${JSON.stringify(response.data.data.tasks)}`)
+      (`${JSON.stringify(response.data.data.tasks)}`)
       this.tasks = response.data.data.tasks;
     },
 

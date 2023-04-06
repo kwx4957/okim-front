@@ -12,7 +12,7 @@ import { defineComponent, PropType } from 'vue'
 import { RouteParams } from 'vue-router'
 import { AppRouteNames } from './router'
 
-console.log(AppRouteNames)
+(AppRouteNames)
 
 export default defineComponent({
   name: 'AppLink',

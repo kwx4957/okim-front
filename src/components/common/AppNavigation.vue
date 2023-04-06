@@ -14,7 +14,6 @@
           <li tabindex="0">
             <span>그룹</span>
             <ul class="bg-base-100">
-              <!-- TODO group 클릭 시 어떻게 로직 짤지?-->
               <li v-for="group in groups" :key="group.organizationId" :id="'group-menu-' + group.organizationId">
                 <h1 @click="handleClickGroupMenu(group.organizationId)">{{ group.organizationName }}</h1>
               </li>
@@ -34,7 +33,12 @@
           <!-- navigation.profile.dropboxdown-rabel -->
           <label tabindex="0" class="btn btn-ghost btn-circle avatar">
             <div class="w-10 rounded-full">
-              <img src="../../assets/img/user.png" alt="프로필 이미지">
+              <template v-if="isLoggedIn">
+                <img :src="userProfileLink" alt="프로필 이미지">
+              </template>
+              <template v-else>
+                <img src="@/assets/img/user.png" alt="프로필 이미지">
+              </template>
             </div>
           </label>
 
@@ -100,7 +104,7 @@ export default defineComponent({
     logout() {
       this.$store.dispatch('LOGOUT');
       this.$router.push('/');
-    },
+    }
   }
 })
 </script>
