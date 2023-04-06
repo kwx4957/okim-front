@@ -19,12 +19,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "profile" */ '../views/Profile.vue')
     },
     {
-        name: 'taskCreate',
-        path: '/tasks/:taskId/create',
-        meta: { auth: true },
-        component: () => import(/* webpackChunkName: "profile" */ '../views/EditTaskItem.vue')
-    },
-    {
         name: 'editTask',
         path: '/tasks/:taskId/edit',
         meta: { auth: true },
@@ -35,21 +29,32 @@ const routes = [
         path: '/register',
         component: () => import(/* webpackChunkName: "profile" */ '../views/Register.vue')
     },
+
+    // User Tasks
+    {
+        name: 'myTasks',
+        path: '/mytasks',
+        meta: { auth: true },
+        component: () => import(/* webpackChunkName: "profile" */ '../views/UserTasks.vue')
+    },
     {
         name: 'userTasks',
         path: '/user/:userId/tasks',
         component: () => import(/* webpackChunkName: "profile" */ '../views/UserTasks.vue')
     },
+
+
+
+    {
+        name: 'taskCreate',
+        path: '/tasks/:taskId/create',
+        meta: { auth: true },
+        component: () => import(/* webpackChunkName: "profile" */ '../views/UserTaskItems.vue')
+    },
     {
         name: 'userTaskItems',
         path: '/user/:userId/tasks/:taskId/items',
         component: () => import(/* webpackChunkName: "profile" */ '../views/UserTaskItems.vue')
-    },
-    {
-        name: 'myTasks',
-        path: '/mytasks',
-        meta: { auth: true },
-        component: () => import(/* webpackChunkName: "profile" */ '../views/MyTasks.vue')
     },
     {
         name: 'groupList',
@@ -73,7 +78,13 @@ router.beforeEach((to, from, next) => {
         next('/login');
         return;
     }
+    if (to.name === 'myTasks' && localStorage.getItem('userId')) {
+        const userId = localStorage.getItem("userId");
+        if (userId) {
+            to.params.userId = userId;
+        }
+    }
     next();
 })
-  
+
 export default router

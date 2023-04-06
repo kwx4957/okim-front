@@ -4,7 +4,7 @@
       <div class="flex-1">
         <!-- nav.logo -->
         <router-link to="/">
-          <div class="btn btn-ghost normal-case text-xl rounded rounded-xs">할일 공유 v 1.1</div>
+          <div class="btn btn-ghost normal-case text-xl rounded rounded-xs">할일 공유</div>
         </router-link>
 
 
@@ -34,7 +34,7 @@
           <!-- navigation.profile.dropboxdown-rabel -->
           <label tabindex="0" class="btn btn-ghost btn-circle avatar">
             <div class="w-10 rounded-full">
-              <img :src="this.$store.getters.userProfileLink" alt="프로필 이미지">
+              <img src="../../assets/img/user.png" alt="프로필 이미지">
             </div>
           </label>
 

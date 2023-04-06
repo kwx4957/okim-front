@@ -19,7 +19,6 @@
 import {defineComponent} from 'vue'
 import taskService from "@/services/task/TaskService";
 import {mapActions} from 'vuex'
-import popup from "@/components/Popup";
 
 export default defineComponent({
   name: 'ButtonCreateTask',
@@ -27,7 +26,6 @@ export default defineComponent({
 
   },
   methods: {
-    ...mapActions(['task', ('saveAdhocTask')]),
     /**
      * 0. 권한이 없을 경우에는 불가능
      * 1. state & localstorage 에서 임시 저장된 tempTaskId 가 있는 지 확인
@@ -38,21 +36,16 @@ export default defineComponent({
     async createTemporaryTask() {
       // 로그인 하지 않을 경우 로그인 페이지로 이동
       if (localStorage.getItem('currentUser') == null) {
+        alert("로그인 후 사용할 수 있습니다")
         this.$router.push({ name: 'login'})
         return
       }
 
       // 1. 임시 테스크 생성 요청
       const response = await taskService.createAdhocTask()
-          .catch(error => {
-            console.log(error.data)
+          .catch(error => {console.log(error.data)});
 
-          });
-
-      // 2. 테스크 저장
-      this.$store.dispatch('saveAdhocTask', response.data.data.taskId);
-
-      // 3. 페이지 이동
+      // 2. 페이지 이동
       this.$router.push({name: 'taskCreate', params: {taskId: response.data.data.taskId}});
     }
 

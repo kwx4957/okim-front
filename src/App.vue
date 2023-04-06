@@ -3,7 +3,6 @@
     <AppNavigation />
     <router-view/>
   </div>
-
 </template>
 
 <script>

@@ -17,18 +17,10 @@
     <div class="main">
       <main>
         <div class="grid grid-cols-1 sm:grid-cols-1 gap-4 p-10">
-          <!-- main red card(case1. 하나의 테스크 가운데 할일을 절반도 못한 경우) -->
 
           <router-link v-for="item in tasks" :key="item.id" :to="{ name: 'editTask', params: { taskId: item.taskId }}" :id="`card-${item.id}`">
             <div class="card bg-base-200 shadow-lg hover:shadow-2xl hover:cursor-pointer hover:bg-neutral-200 border rounded-lg">
               <div class="card-body">
-<!--                <div class="rating">-->
-<!--                  <input type="radio" name="rating-2" class="mask mask-star-2 bg-red-400" :checked="item.itemCompletedCount / item.itemTotalCount === 1" />-->
-<!--                  <input type="radio" name="rating-2" class="mask mask-star-2 bg-red-400" :checked="item.itemCompletedCount / item.itemTotalCount === 2" />-->
-<!--                  <input type="radio" name="rating-2" class="mask mask-star-2 bg-red-400" :checked="item.itemCompletedCount / item.itemTotalCount === 3" />-->
-<!--                  <input type="radio" name="rating-2" class="mask mask-star-2 bg-red-400" :checked="item.itemCompletedCount / item.itemTotalCount === 4" />-->
-<!--                  <input type="radio" name="rating-2" class="mask mask-star-2 bg-red-400" :checked="item.itemCompletedCount / item.itemTotalCount === 5" />-->
-<!--                </div>-->
                 <div class="badge badge-lg my-2 badge-error text-sm">
                   <span class="mr-2">{{ item.itemCompletedCount }}</span>/<span class="ml-2">{{ item.itemTotalCount }}</span>
                 </div>
@@ -68,22 +60,6 @@ export default defineComponent({
   },
   components: {
     ButtonCreateTask
-  },
-  computed: {
-    starCount(item) {
-      const ratio = item.itemCompletedCount / item.itemTotalCount;
-      if (ratio <= 0.2) {
-        return 1;
-      } else if (ratio <= 0.4) {
-        return 2;
-      } else if (ratio <= 0.6) {
-        return 3;
-      } else if (ratio <= 0.8) {
-        return 4;
-      } else {
-        return 5;
-      }
-    }
   },
   async mounted() {
 

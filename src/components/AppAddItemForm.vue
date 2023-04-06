@@ -1,7 +1,7 @@
 <template>
   <div class="items-center w-full bg-base-200 p-3">
     <!-- input form contents -->
-    <form v-on:submit.prevent="addTodo">
+    <form v-on:submit.prevent="addItem">
       <div class="form-control w-full max-w-xs mx-auto ">
 <!--        <label class="label">-->
 <!--          <span class="label-text text-md">할일을 작성하세요</span>-->
@@ -54,11 +54,26 @@ export default {
       // 2. 테스크에 아이템 추가 요청 보내기
       const response = await itemService.addItem(item)
 
-      // // 3. 서버로부터 받은 새로운 todo를 todo 목록의 맨 앞에 추가
+      // 3. 서버로부터 받은 새로운 todo를 todo 목록의 맨 앞에 추가
       this.addItem(response.data.data);
 
       // 4.입력 필드 초기화
       this.formItemTitle = ''
+    },
+    async addItem() {
+      this.taskId = this.$route.params.taskId
+      const item = {
+        taskId: this.taskId,
+        title: this.formItemTitle
+      }
+
+      itemService.addItem(item).then(response => {
+        console.log(JSON.stringify(response.data.data))
+        this.$emit("refreshItem")
+        this.formItemTitle = ''
+      }).catch(error => {
+        console.log(JSON.stringify(error.data))
+      })
     }
   }
 }
